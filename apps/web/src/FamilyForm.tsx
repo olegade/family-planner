@@ -3,7 +3,7 @@ import {
   createFamilyMember,
   type CreateFamilyMemberInput,
   type FamilyMember
-} from "./api/family";
+} from "./api/family.js";
 
 type Props = {
   onCreated(member: FamilyMember): void;
