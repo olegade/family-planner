@@ -62,35 +62,34 @@ It’s still early, but the core foundation is solid:
 flowchart TD
 
 %% === CLIENT LAYER ===
-A[Browser\nReact + Vite\n(TypeScript)] 
-    -->|HTTP (fetch)| B[Fastify API\nNode.js (ESM)]
+A[Browser: React + Vite] -->|HTTP fetch| B[Fastify API]
 
 %% === API LAYER ===
-subgraph API["apps/api (Backend)"]
-    B --> C[Routes\n/family-members]
-    C --> D[Service Layer\n(domain logic)]
-    D --> E[Prisma Client\n(via pg adapter)]
+subgraph API [apps/api Backend]
+    B --> C[Routes: /family-members]
+    C --> D[Service Layer]
+    D --> E[Prisma Client]
 end
 
 %% === DATABASE ===
-subgraph DB["PostgreSQL\nDocker Container"]
+subgraph DB [PostgreSQL (Docker)]
     F[(familyplanner_dev)]
 end
 
 E -->|SQL| F
 
 %% === MONOREPO ===
-subgraph Monorepo["pnpm workspace"]
+subgraph Monorepo [pnpm workspace]
     A
     B
 end
 
 %% === FUTURE INTEGRATIONS ===
-subgraph Future["Future Integrations"]
-    G[(Calendar Feeds\nAULA / ForældreIntra)]
-    H[(Weather API)]
-    I[(Midttrafik Live)]
-    J[(Authentication\nMagic Links)]
+subgraph Future [Future Integrations]
+    G[Calendar Feeds (AULA, ForældreIntra)]
+    H[Weather API]
+    I[Midttrafik Live]
+    J[Authentication (Magic Links)]
 end
 
 A -.-> G
