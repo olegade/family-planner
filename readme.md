@@ -56,50 +56,6 @@ It’s still early, but the core foundation is solid:
 
 ---
 
-## 🧱 Architecture
-
-```mermaid
-flowchart TD
-
-%% === CLIENT LAYER ===
-A[Browser: React + Vite] -->|HTTP fetch| B[Fastify API]
-
-%% === API LAYER ===
-subgraph API [apps/api Backend]
-    B --> C[Routes: /family-members]
-    C --> D[Service Layer]
-    D --> E[Prisma Client]
-end
-
-%% === DATABASE ===
-subgraph DB [PostgreSQL (Docker)]
-    F[(familyplanner_dev)]
-end
-
-E -->|SQL| F
-
-%% === MONOREPO ===
-subgraph Monorepo [pnpm workspace]
-    A
-    B
-end
-
-%% === FUTURE INTEGRATIONS ===
-subgraph Future [Future Integrations]
-    G[Calendar Feeds (AULA, ForældreIntra)]
-    H[Weather API]
-    I[Midttrafik Live]
-    J[Authentication (Magic Links)]
-end
-
-A -.-> G
-A -.-> H
-A -.-> I
-B -.-> J
-```
-
----
-
 ## 🔮 Roadmap  
 This is not meant to be a “finished product” right away — the goal is to build it slowly, feature by feature, in a way that actually fits how my own family works.
 
