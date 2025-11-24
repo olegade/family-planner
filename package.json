@@ -1,0 +1,15 @@
+{
+  "name": "family-planner",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "echo \"Use: pnpm dev:api or pnpm dev:web\"",
+    "dev:api": "pnpm --filter @family-planner/api dev",
+    "dev:web": "pnpm --filter @family-planner/web dev",
+    "build": "pnpm -r build"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

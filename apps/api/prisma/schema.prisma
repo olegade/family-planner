@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model FamilyMember {
+  id        String   @id @default(uuid())
+  name      String
+  role      FamilyRole
+  color     String?  // optional, to use in UI later
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum FamilyRole {
+  PARENT
+  CHILD
+}
