@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { FamilyList } from "./FamilyList.js";
 import { FamilyForm } from "./FamilyForm.js";
 import { deleteFamilyMember, getFamilyMembers, type FamilyMember } from "./api/family.js";
+import { EventList } from "./EventList.js";
+import { EventForm } from "./EventForm.js";
 
 const App = () => {
   const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -35,6 +37,9 @@ const App = () => {
       <h1>Family Planner</h1>
       <FamilyForm onCreated={handleCreated} />
       <FamilyList members={members} loading={loading} onDelete={handleDelete} />
+      <EventForm onCreated={() => window.location.reload()} />
+
+      <EventList />
     </div>
   );
 };

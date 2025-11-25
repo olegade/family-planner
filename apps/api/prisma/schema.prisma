@@ -7,12 +7,27 @@ datasource db {
 }
 
 model FamilyMember {
-  id        String   @id @default(uuid())
+  id        String        @id @default(uuid())
   name      String
   role      FamilyRole
-  color     String?  // optional, to use in UI later
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  color     String?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  // Relation: one family member can have many events
+  events    FamilyEvent[]
+}
+
+model FamilyEvent {
+  id             String       @id @default(uuid())
+  title          String
+  start          DateTime
+  end            DateTime
+  location       String?
+  familyMemberId String
+  familyMember   FamilyMember @relation(fields: [familyMemberId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 enum FamilyRole {
