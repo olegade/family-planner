@@ -46,3 +46,9 @@ export async function createFamilyEvent(input: CreateFamilyEventInput) {
     }
   });
 }
+
+export async function deleteFamilyEvent(id: string) {
+  return prisma.familyEvent.delete({
+    where: { id }
+  });
+}
