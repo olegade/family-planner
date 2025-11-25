@@ -11,10 +11,19 @@ const App = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getFamilyMembers()
-      .then(setMembers)
-      .finally(() => setLoading(false));
-  }, []);
+      async function load() {
+        try {
+          const data = await getFamilyMembers();
+          setMembers(data);
+        } catch {
+          setError("Failed to load family members");
+        } finally {
+          setLoading(false);
+        }
+      }
+  
+      load();
+    }, []);
 
   function handleCreated(member: FamilyMember) {
     setMembers((prev) => [...prev, member]);
@@ -49,3 +58,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <App />
   </React.StrictMode>
 );
+
+function setError(arg0: string) {
+  throw new Error("Function not implemented.");
+}

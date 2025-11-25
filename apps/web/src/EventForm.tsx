@@ -11,6 +11,22 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
   const [familyMemberId, setFamilyMemberId] = useState("");
 
   useEffect(() => {
+      async function load() {
+        try {
+          const data = await getFamilyMembers();
+          setMembers(data);
+          if (data.length > 0) setFamilyMemberId(data[0].id);
+
+        } catch {
+          setError("Failed to load events");
+        } finally {
+          setLoading(false);
+        }
+      }  
+      load();
+    }, []);
+
+  useEffect(() => {
     getFamilyMembers().then((m) => {
       setMembers(m);
       if (m.length > 0) setFamilyMemberId(m[0].id);
@@ -78,3 +94,11 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
     </form>
   );
 }
+
+function setError(arg0: string) {
+    throw new Error("Function not implemented.");
+}
+function setLoading(arg0: boolean) {
+    throw new Error("Function not implemented.");
+}
+

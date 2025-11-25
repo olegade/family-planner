@@ -15,8 +15,13 @@ export type FamilyEvent = {
 
 const API_URL = "http://localhost:3001";
 
-export async function fetchEvents(): Promise<FamilyEvent[]> {
-  const res = await fetch(`${API_URL}/family-events`);
+export async function fetchEvents(params?: { from?: string; to?: string }): Promise<FamilyEvent[]> {
+  const url = new URL(`${API_URL}/family-events`);
+
+  if (params?.from) url.searchParams.set("from", params.from);
+  if (params?.to) url.searchParams.set("to", params.to);
+
+  const res = await fetch(url.toString());
   if (!res.ok) throw new Error("Failed to fetch events");
   return res.json();
 }
