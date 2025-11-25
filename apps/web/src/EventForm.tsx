@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createEvent } from "./api/events.js";
-import { getFamilyMembers, FamilyMember } from "./api/family.js";
+import { fetchFamilyMembers, FamilyMember } from "./api/family.js";
 
 export function EventForm({ onCreated }: { onCreated: () => void }) {
   const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -13,7 +13,7 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
   useEffect(() => {
       async function load() {
         try {
-          const data = await getFamilyMembers();
+          const data = await fetchFamilyMembers();
           setMembers(data);
           if (data.length > 0) setFamilyMemberId(data[0].id);
 
@@ -27,7 +27,7 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
     }, []);
 
   useEffect(() => {
-    getFamilyMembers().then((m) => {
+    fetchFamilyMembers().then((m) => {
       setMembers(m);
       if (m.length > 0) setFamilyMemberId(m[0].id);
     });

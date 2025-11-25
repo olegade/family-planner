@@ -9,7 +9,7 @@ export type FamilyMember = {
 
 const API_URL = "http://localhost:3001";
 
-export async function getFamilyMembers(): Promise<FamilyMember[]> {
+export async function fetchFamilyMembers(): Promise<FamilyMember[]> {
   const response = await fetch(`${API_URL}/family-members`);
   if (!response.ok) {
     throw new Error("Failed to load family members");

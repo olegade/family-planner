@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { FamilyList } from "./FamilyList.js";
 import { FamilyForm } from "./FamilyForm.js";
-import { deleteFamilyMember, getFamilyMembers, type FamilyMember } from "./api/family.js";
+import { deleteFamilyMember, fetchFamilyMembers, type FamilyMember } from "./api/family.js";
 import { EventList } from "./EventList.js";
 import { EventForm } from "./EventForm.js";
+import { NextEventSummary } from "./NextEventSummary.js";
 
 const App = () => {
   const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -13,7 +14,7 @@ const App = () => {
   useEffect(() => {
       async function load() {
         try {
-          const data = await getFamilyMembers();
+          const data = await fetchFamilyMembers();
           setMembers(data);
         } catch {
           setError("Failed to load family members");
@@ -44,6 +45,8 @@ const App = () => {
   return (
     <div style={{ padding: "1rem", fontFamily: "system-ui" }}>
       <h1>Family Planner</h1>
+      <NextEventSummary />
+
       <FamilyForm onCreated={handleCreated} />
       <FamilyList members={members} loading={loading} onDelete={handleDelete} />
       <EventForm onCreated={() => window.location.reload()} />
