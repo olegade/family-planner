@@ -1,37 +1,61 @@
 import { NextEventSummary } from "./NextEventSummary.js";
 import { FamilyPanel } from "./FamilyPanel.js";
 import { EventsPanel } from "./EventsPanel.js";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "./components/ui/card.js";
 
 export function Dashboard() {
   return (
-    <div
-      style={{
-        padding: "1.5rem",
-        maxWidth: "960px",
-        margin: "0 auto",
-        fontFamily: "system-ui",
-      }}
-    >
-      <header style={{ marginBottom: "1.5rem" }}>
-        <h1 style={{ marginBottom: "0.25rem" }}>Family Dashboard</h1>
-        <p style={{ margin: 0, opacity: 0.8, fontSize: "0.95rem" }}>
+    <div className="flex flex-col gap-6">
+      {/* Page header */}
+      <section className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900">
+          Family Dashboard
+        </h1>
+        <p className="text-sm text-slate-600">
           Overview of upcoming events and family activity.
         </p>
-      </header>
-
-      <section style={{ marginBottom: "2rem" }}>
-        <NextEventSummary />
       </section>
 
-      <section
-        style={{
-          display: "grid",
-          gap: "1.5rem",
-          gridTemplateColumns: "1fr 1fr",
-        }}
-      >
-        <FamilyPanel />
-        <EventsPanel />
+      {/* Next events */}
+      <Card className="shadow-sm border-slate-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-semibold text-slate-800">
+            Next event per family member
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <NextEventSummary />
+        </CardContent>
+      </Card>
+
+      {/* Family / Events grid */}
+      <section className="grid gap-4 md:grid-cols-2">
+        <Card className="shadow-sm border-slate-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-slate-800">
+              Family
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FamilyPanel />
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm border-slate-200">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-semibold text-slate-800">
+              Events
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EventsPanel />
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

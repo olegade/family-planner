@@ -3,8 +3,7 @@ import { EventList } from "./EventList.js";
 
 export function EventsPanel() {
   return (
-    <div>
-      <h2>Events</h2>
+    <div className="space-y-4">
       <EventForm onCreated={() => window.location.reload()} />
       <EventList />
     </div>

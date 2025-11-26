@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createEvent } from "./api/events.js";
 import { fetchFamilyMembers, FamilyMember } from "./api/family.js";
+import { Button } from "./components/ui/button.js";
 
 export function EventForm({ onCreated }: { onCreated: () => void }) {
   const [members, setMembers] = useState<FamilyMember[]>([]);
@@ -26,13 +27,6 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
       load();
     }, []);
 
-  useEffect(() => {
-    fetchFamilyMembers().then((m) => {
-      setMembers(m);
-      if (m.length > 0) setFamilyMemberId(m[0].id);
-    });
-  }, []);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -56,32 +50,66 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "24px" }}>
-      <h3>Create Event</h3>
-
-      <div>
-        <label>Title: </label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} required />
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Title
+        </label>
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        />
       </div>
 
-      <div>
-        <label>Start: </label>
-        <input type="datetime-local" value={start} onChange={(e) => setStart(e.target.value)} required />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Start
+        </label>
+        <input
+          type="datetime-local"
+          value={start}
+          onChange={(e) => setStart(e.target.value)}
+          required
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        />
       </div>
 
-      <div>
-        <label>End: </label>
-        <input type="datetime-local" value={end} onChange={(e) => setEnd(e.target.value)} required />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          End
+        </label>
+        <input
+          type="datetime-local"
+          value={end}
+          onChange={(e) => setEnd(e.target.value)}
+          required
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        />
       </div>
 
-      <div>
-        <label>Location (optional): </label>
-        <input value={location} onChange={(e) => setLocation(e.target.value)} />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Location (optional)
+        </label>
+        <input
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+          placeholder="e.g. Gym, School, Home"
+        />
       </div>
 
-      <div>
-        <label>Family Member: </label>
-        <select value={familyMemberId} onChange={(e) => setFamilyMemberId(e.target.value)}>
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Family Member
+        </label>
+        <select
+          value={familyMemberId}
+          onChange={(e) => setFamilyMemberId(e.target.value)}
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        >
           {members.map((m) => (
             <option key={m.id} value={m.id}>
               {m.name}
@@ -90,7 +118,9 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
         </select>
       </div>
 
-      <button type="submit" style={{ marginTop: "10px" }}>Create Event</button>
+      <Button type="submit" className="text-sm" disabled={!title || !start || !end}>
+        Create Event
+      </Button>
     </form>
   );
 }
@@ -101,4 +131,3 @@ function setError(arg0: string) {
 function setLoading(arg0: boolean) {
     throw new Error("Function not implemented.");
 }
-

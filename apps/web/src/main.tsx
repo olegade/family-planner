@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { Dashboard } from "./Dashboard.js";
 import { FamilyPanel } from "./FamilyPanel.js";
 import { EventsPanel } from "./EventsPanel.js";
+import "./styles.css";
+import { Button } from "./components/ui/button.js";
 
 type View = "dashboard" | "family" | "events";
 
@@ -34,16 +36,8 @@ const App = () => {
   return (
     <>
       {/* Simple top navigation */}
-      <nav
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          padding: "0.75rem 1.5rem",
-          borderBottom: "1px solid #ddd",
-          marginBottom: "1rem",
-          fontFamily: "system-ui",
-        }}
-      >
+          <nav className="flex gap-2 px-6 py-3 border-b border-slate-200 bg-white sticky top-0 z-10">
+
         <NavButton
           label="Dashboard"
           active={view === "dashboard"}
@@ -61,7 +55,11 @@ const App = () => {
         />
       </nav>
 
-      {renderView()}
+       <main className="min-h-screen bg-slate-50">
+      <div className="max-w-5xl mx-auto px-4 py-6">
+        {renderView()}
+      </div>
+    </main>
     </>
   );
 };
@@ -74,21 +72,14 @@ type NavButtonProps = {
 
 function NavButton({ label, active, onClick }: NavButtonProps) {
   return (
-    <button
+    <Button
       type="button"
+      variant={active ? "default" : "outline"}
+      className="text-sm"
       onClick={onClick}
-      style={{
-        padding: "0.35rem 0.75rem",
-        borderRadius: 999,
-        border: active ? "1px solid #2563eb" : "1px solid #ccc",
-        background: active ? "#2563eb" : "#fff",
-        color: active ? "#fff" : "#333",
-        fontSize: "0.9rem",
-        cursor: "pointer",
-      }}
     >
       {label}
-    </button>
+    </Button>
   );
 }
 

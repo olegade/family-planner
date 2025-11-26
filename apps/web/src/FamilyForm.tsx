@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button } from "./components/ui/button.js";
 import {
   createFamilyMember,
   type CreateFamilyMemberInput,
@@ -46,54 +47,56 @@ export function FamilyForm({ onCreated }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
-      <h2>Add family member</h2>
-
+    <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <p style={{ color: "red" }}>
+        <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
-        </p>
+        </div>
       )}
 
-      <div style={{ marginBottom: "0.5rem" }}>
-        <label>
-          Name:{" "}
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Name
         </label>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+          placeholder="Enter name"
+        />
       </div>
 
-      <div style={{ marginBottom: "0.5rem" }}>
-        <label>
-          Role:{" "}
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value as "PARENT" | "CHILD")}
-          >
-            <option value="PARENT">Parent</option>
-            <option value="CHILD">Child</option>
-          </select>
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Role
         </label>
+        <select
+          value={role}
+          onChange={(e) => setRole(e.target.value as "PARENT" | "CHILD")}
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        >
+          <option value="PARENT">Parent</option>
+          <option value="CHILD">Child</option>
+        </select>
       </div>
 
-      <div style={{ marginBottom: "0.5rem" }}>
-        <label>
-          Color (optional):{" "}
-          <input
-            type="text"
-            placeholder="#ff0000"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
+      <div className="space-y-1">
+        <label className="block text-sm font-medium text-slate-700">
+          Color (optional)
         </label>
+        <input
+          type="text"
+          placeholder="#ff0000"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+          className="block w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:border-sky-500"
+        />
       </div>
 
-      <button type="submit" disabled={submitting}>
+      <Button type="submit" disabled={submitting} className="text-sm">
         {submitting ? "Saving..." : "Add member"}
-      </button>
+      </Button>
     </form>
   );
 }

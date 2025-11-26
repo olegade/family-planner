@@ -44,20 +44,9 @@ export function FamilyPanel() {
   }
 
   return (
-    <div>
-      <h2>Family</h2>
-
+    <div className="space-y-4">
       {error && (
-        <div
-          style={{
-            marginBottom: "1rem",
-            padding: "0.75rem 1rem",
-            background: "#fde2e1",
-            color: "#7a1f1a",
-            borderRadius: 6,
-            fontSize: "0.9rem",
-          }}
-        >
+        <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
           {error}
         </div>
       )}

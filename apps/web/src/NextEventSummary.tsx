@@ -60,67 +60,50 @@ export function NextEventSummary() {
   }, []);
 
   if (loading) {
-    return <p>Loading next events...</p>;
+    return <p className="text-sm text-slate-500">Loading next events...</p>;
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return <p className="text-sm text-red-600">{error}</p>;
   }
 
   if (items.length === 0) {
-    return <p>No family members found.</p>;
+    return <p className="text-sm text-slate-500">No family members found.</p>;
   }
 
   return (
-    <div style={{ marginTop: "1.5rem", marginBottom: "2rem" }}>
-      <h2>Next event per family member</h2>
-      <div>
+      <div className="space-y-2">
         {items.map(({ member, event }) => (
           <div
             key={member.id}
-            style={{
-              padding: "0.75rem 1rem",
-              marginBottom: "0.75rem",
-              border: "1px solid #ddd",
-              borderRadius: "8px"
-            }}
+            className="rounded-md bg-slate-50 px-3 py-2"
           >
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "0.25rem" }}>
+            <div className="flex items-center gap-2 mb-1">
               {member.color && (
                 <span
-                  style={{
-                    display: "inline-block",
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    backgroundColor: member.color,
-                    marginRight: "0.5rem"
-                  }}
+                  className="inline-block h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: member.color }}
                 />
               )}
-              <strong>{member.name}</strong>
-              <span style={{ marginLeft: "0.5rem", fontSize: "0.85rem", opacity: 0.7 }}>
+              <span className="font-semibold text-sm">{member.name}</span>
+              <span className="text-xs text-slate-500">
                 ({member.role.toLowerCase()})
               </span>
             </div>
 
             {event ? (
-              <div style={{ fontSize: "0.9rem" }}>
-                <span style={{ fontWeight: 500 }}>{event.title}</span>{" "}
-                <span style={{ opacity: 0.8 }}>
-                  —{" "}
-                 {humanizeDate(event.start)}
+              <div className="text-sm">
+                <span className="font-medium">{event.title}</span>{" "}
+                <span className="text-slate-600">
+                  — {humanizeDate(event.start)}
                   {event.location ? ` @ ${event.location}` : ""}
                 </span>
               </div>
             ) : (
-              <div style={{ fontSize: "0.9rem", opacity: 0.7 }}>
-                No upcoming events
-              </div>
+              <div className="text-sm text-slate-500">No upcoming events</div>
             )}
           </div>
         ))}
       </div>
-    </div>
-  );
+    );
 }
