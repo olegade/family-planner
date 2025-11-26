@@ -24,6 +24,11 @@ export function EventList({ refreshKey }: EventListProps) {
   const [scope, setScope] = useState<Scope>("all");
 
   async function handleDelete(id: string) {
+    // Simple browser confirm dialog before deleting
+    if (!window.confirm("Er du sikker på, at du vil slette denne aftale?")) {
+      return;
+    }
+
     try {
       await fetch(`http://localhost:3001/family-events/${id}`, {
         method: "DELETE",
