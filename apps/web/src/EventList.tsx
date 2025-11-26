@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchEvents, type FamilyEvent } from "./api/events.js";
+import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs.js";
+import { Button } from "./components/ui/button.js";
+
 type Scope = "all" | "today" | "week";
 
 type GroupedEvents = {
@@ -10,11 +13,28 @@ type GroupedEvents = {
   events: FamilyEvent[];
 };
 
-export function EventList() {
+type EventListProps = {
+  refreshKey?: number;
+};
+
+export function EventList({ refreshKey }: EventListProps) {
   const [events, setEvents] = useState<FamilyEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [scope, setScope] = useState<Scope>("all");
+
+  async function handleDelete(id: string) {
+    try {
+      await fetch(`http://localhost:3001/family-events/${id}`, {
+        method: "DELETE",
+      });
+
+      // Optimistic update: remove the event locally
+      setEvents((prev) => prev.filter((ev) => ev.id !== id));
+    } catch (err) {
+      console.error("Failed to delete event", err);
+    }
+  }
 
   useEffect(() => {
     async function load() {
@@ -55,19 +75,24 @@ export function EventList() {
         setLoading(false);
       }
     }
+
     load();
-  }, [scope]);
+  }, [scope, refreshKey]);
 
   if (loading) {
-    return <p>Loading events...</p>;
+    return <p className="text-sm text-slate-500">Loading events...</p>;
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return (
+      <p className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+        {error}
+      </p>
+    );
   }
 
   if (events.length === 0) {
-    return <p>No events yet.</p>;
+    return <p className="text-sm text-slate-500">No events yet.</p>;
   }
 
   // Group events by family member
@@ -83,7 +108,7 @@ export function EventList() {
         memberName: member.name,
         memberRole: member.role,
         memberColor: member.color,
-        events: []
+        events: [],
       });
     }
 
@@ -92,92 +117,96 @@ export function EventList() {
   }
 
   // Convert map to array and sort
-  const groups = Array.from(groupsMap.values())
-    .sort((a, b) => a.memberName.localeCompare(b.memberName));
+  const groups = Array.from(groupsMap.values()).sort((a, b) =>
+    a.memberName.localeCompare(b.memberName)
+  );
 
   // Sort events inside each group by start time
   groups.forEach((g) => {
     g.events.sort(
-      (a, b) =>
-        new Date(a.start).getTime() - new Date(b.start).getTime()
+      (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
     );
   });
 
   return (
-    <div style={{ marginTop: "2rem" }}>
-      <h2>Upcoming Events by Family Member</h2>
-      <div style={{ marginBottom: "0.75rem" }}>
-        <span style={{ marginRight: "0.5rem" }}>Show:</span>
-        <button
-          type="button"
-          onClick={() => setScope("all")}
-          disabled={scope === "all"}
-        >
-          All
-        </button>
-        <button
-          type="button"
-          onClick={() => setScope("today")}
-          disabled={scope === "today"}
-          style={{ marginLeft: "0.5rem" }}
-        >
-          Today
-        </button>
-        <button
-          type="button"
-          onClick={() => setScope("week")}
-          disabled={scope === "week"}
-          style={{ marginLeft: "0.5rem" }}
-        >
-          This week
-        </button>
-      </div>
-      {groups.map((group) => (
-        <div
-          key={group.memberId}
-          style={{
-            marginBottom: "1.5rem",
-            padding: "0.75rem 1rem",
-            border: "1px solid #ddd",
-            borderRadius: "8px"
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-            {group.memberColor && (
-              <span
-                style={{
-                  display: "inline-block",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  backgroundColor: group.memberColor,
-                  marginRight: "0.5rem"
-                }}
-              />
-            )}
-            <strong>{group.memberName}</strong>
-            <span style={{ marginLeft: "0.5rem", fontSize: "0.85rem", opacity: 0.7 }}>
-              ({group.memberRole.toLowerCase()})
-            </span>
-          </div>
+    <div className="mt-4 space-y-4">
+      <div className="flex items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold text-slate-800">
+          Upcoming events by family member
+        </h2>
 
-          <ul style={{ margin: 0, paddingLeft: "1.1rem" }}>
-            {group.events.map((ev) => (
-              <li key={ev.id} style={{ marginBottom: "0.25rem" }}>
-                <span style={{ fontWeight: 500 }}>{ev.title}</span>{" "}
-                <span style={{ fontSize: "0.9rem", opacity: 0.8 }}>
-                  — {new Date(ev.start).toLocaleString()} →{" "}
-                  {new Date(ev.end).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit"
-                  })}
-                  {ev.location ? ` @ ${ev.location}` : ""}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        <Tabs
+          value={scope}
+          onValueChange={(value: string) => setScope(value as Scope)}
+          className="ml-auto"
+        >
+          <TabsList className="h-8">
+            <TabsTrigger value="all" className="px-3 text-xs">
+              All
+            </TabsTrigger>
+            <TabsTrigger value="today" className="px-3 text-xs">
+              Today
+            </TabsTrigger>
+            <TabsTrigger value="week" className="px-3 text-xs">
+              This week
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
+      <div className="space-y-3">
+        {groups.map((group) => (
+          <div
+            key={group.memberId}
+            className="rounded-lg border border-slate-200 bg-white px-4 py-3 shadow-sm"
+          >
+            <div className="mb-2 flex items-center gap-2">
+              {group.memberColor && (
+                <span
+                  className="inline-block h-2.5 w-2.5 rounded-full"
+                  style={{ backgroundColor: group.memberColor }}
+                />
+              )}
+              <span className="text-sm font-semibold text-slate-900">
+                {group.memberName}
+              </span>
+              <span className="text-xs text-slate-500">
+                ({group.memberRole.toLowerCase()})
+              </span>
+            </div>
+
+            <ul className="mt-1 space-y-1 text-sm text-slate-700">
+              {group.events.map((ev) => (
+                <li
+                  key={ev.id}
+                  className="flex items-start justify-between gap-2 rounded-md bg-slate-50 px-3 py-1.5"
+                >
+                  <div className="flex-1">
+                    <span className="font-medium">{ev.title}</span>{" "}
+                    <span className="text-slate-600">
+                      — {new Date(ev.start).toLocaleString()} →{" "}
+                      {new Date(ev.end).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                      {ev.location ? ` @ ${ev.location}` : ""}
+                    </span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs text-red-600 hover:text-red-700"
+                    onClick={() => handleDelete(ev.id)}
+                  >
+                    Delete
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
