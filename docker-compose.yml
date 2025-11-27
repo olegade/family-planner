@@ -13,6 +13,16 @@ services:
       - "5432:5432"
     volumes:
       - family_planner_db_data:/var/lib/postgresql/data
-
+  api:
+      build:
+        context: .
+        dockerfile: apps/api/Dockerfile
+      environment:
+        # IMPORTANT: This must match what prisma.config.ts expects
+        DATABASE_URL: postgres://familyplanner:familyplanner@db:5432/familyplanner_dev
+      depends_on:
+        - db
+      ports:
+        - "3001:3001"
 volumes:
   family_planner_db_data:

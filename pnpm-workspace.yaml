@@ -1,9 +1,13 @@
 packages:
   - apps/*
   - packages/*
+  - infra/pulumi
 
 onlyBuiltDependencies:
   - '@prisma/engines'
+  - '@pulumi/docker'
+  - '@pulumi/docker-build'
   - '@swc/core'
   - esbuild
   - prisma
+  - protobufjs

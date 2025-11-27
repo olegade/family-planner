@@ -1,0 +1,8 @@
+node_modules
+.git
+.gitignore
+infra
+dist
+Dockerfile
+npm-debug.log*
+pnpm-debug.log*
