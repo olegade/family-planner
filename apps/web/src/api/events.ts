@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./config.js";
 export type FamilyEvent = {
   id: string;
   title: string;
@@ -13,10 +14,8 @@ export type FamilyEvent = {
   };
 };
 
-const API_URL = "http://localhost:3001";
-
 export async function fetchEvents(params?: { from?: string; to?: string }): Promise<FamilyEvent[]> {
-  const url = new URL(`${API_URL}/family-events`);
+  const url = new URL(`${API_BASE_URL}/family-events`);
 
   if (params?.from) url.searchParams.set("from", params.from);
   if (params?.to) url.searchParams.set("to", params.to);
@@ -35,7 +34,7 @@ export type CreateEventInput = {
 };
 
 export async function createEvent(input: CreateEventInput): Promise<FamilyEvent> {
-  const res = await fetch(`${API_URL}/family-events`, {
+  const res = await fetch(`${API_BASE_URL}/family-events`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),

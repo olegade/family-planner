@@ -1,3 +1,5 @@
+import { API_BASE_URL } from "./config.js";
+
 export type FamilyMember = {
   id: string;
   name: string;
@@ -7,10 +9,8 @@ export type FamilyMember = {
   updatedAt: string;
 };
 
-const API_URL = "http://localhost:3001";
-
 export async function fetchFamilyMembers(): Promise<FamilyMember[]> {
-  const response = await fetch(`${API_URL}/family-members`);
+  const response = await fetch(`${API_BASE_URL}/family-members`);
   if (!response.ok) {
     throw new Error("Failed to load family members");
   }
@@ -26,7 +26,7 @@ export type CreateFamilyMemberInput = {
 export async function createFamilyMember(
   input: CreateFamilyMemberInput
 ): Promise<FamilyMember> {
-  const response = await fetch(`${API_URL}/family-members`, {
+  const response = await fetch(`${API_BASE_URL}/family-members`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -44,7 +44,7 @@ export async function createFamilyMember(
 export async function deleteFamilyMember(
   id: string
 ): Promise<void> {
-  const response = await fetch(`${API_URL}/family-members/${id}`, {
+  const response = await fetch(`${API_BASE_URL}/family-members/${id}`, {
     method: "DELETE"
   });
 
