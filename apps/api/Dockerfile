@@ -28,4 +28,4 @@ RUN npm run build
 
 # 7) Eksponér porten og start API
 EXPOSE 3001
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm run start"]
