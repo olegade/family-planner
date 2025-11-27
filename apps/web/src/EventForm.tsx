@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { createEvent } from "./api/events.js";
+import type { FamilyEvent } from "./api/events.js";
 import { fetchFamilyMembers, FamilyMember } from "./api/family.js";
 import { Button } from "./components/ui/button.js";
 
-export function EventForm({ onCreated }: { onCreated: () => void }) {
+export function EventForm({ onCreated }: { onCreated: (createdEvent: FamilyEvent) => void }) {
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("");
@@ -33,12 +34,12 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
     const startDate = new Date(start);
     const endDate = new Date(end);
 
-    await createEvent({
-        title,
-        start: startDate.toISOString(),
-        end: endDate.toISOString(),
-        location,
-        familyMemberId
+    const created = await createEvent({
+      title,
+      start: startDate.toISOString(),
+      end: endDate.toISOString(),
+      location,
+      familyMemberId
     });
 
     setTitle("");
@@ -46,7 +47,7 @@ export function EventForm({ onCreated }: { onCreated: () => void }) {
     setEnd("");
     setLocation("");
 
-    onCreated();
+    onCreated(created);
   }
 
   return (

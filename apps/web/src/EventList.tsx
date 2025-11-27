@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { fetchEvents, type FamilyEvent } from "./api/events.js";
+import { useState } from "react";
+import type { FamilyEvent } from "./api/events.js";
 import { Tabs, TabsList, TabsTrigger } from "./components/ui/tabs.js";
 import { Button } from "./components/ui/button.js";
 
@@ -14,75 +14,14 @@ type GroupedEvents = {
 };
 
 type EventListProps = {
-  refreshKey?: number;
+  events: FamilyEvent[];
+  loading: boolean;
+  error: string | null;
+  onDelete: (id: string) => void;
 };
 
-export function EventList({ refreshKey }: EventListProps) {
-  const [events, setEvents] = useState<FamilyEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export function EventList({ events, loading, error, onDelete }: EventListProps) {
   const [scope, setScope] = useState<Scope>("all");
-
-  async function handleDelete(id: string) {
-    // Simple browser confirm dialog before deleting
-    if (!window.confirm("Er du sikker på, at du vil slette denne aftale?")) {
-      return;
-    }
-
-    try {
-      await fetch(`http://localhost:3001/family-events/${id}`, {
-        method: "DELETE",
-      });
-
-      // Optimistic update: remove the event locally
-      setEvents((prev) => prev.filter((ev) => ev.id !== id));
-    } catch (err) {
-      console.error("Failed to delete event", err);
-    }
-  }
-
-  useEffect(() => {
-    async function load() {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const now = new Date();
-        let from: string | undefined;
-        let to: string | undefined;
-
-        if (scope === "today") {
-          const startOfDay = new Date(now);
-          startOfDay.setHours(0, 0, 0, 0);
-
-          const endOfDay = new Date(now);
-          endOfDay.setHours(23, 59, 59, 999);
-
-          from = startOfDay.toISOString();
-          to = endOfDay.toISOString();
-        } else if (scope === "week") {
-          const start = new Date(now);
-          start.setHours(0, 0, 0, 0);
-
-          const end = new Date(now);
-          end.setDate(end.getDate() + 7);
-          end.setHours(23, 59, 59, 999);
-
-          from = start.toISOString();
-          to = end.toISOString();
-        }
-
-        const data = await fetchEvents({ from, to });
-        setEvents(data);
-      } catch {
-        setError("Failed to load events");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    load();
-  }, [scope, refreshKey]);
 
   if (loading) {
     return <p className="text-sm text-slate-500">Loading events...</p>;
@@ -100,10 +39,38 @@ export function EventList({ refreshKey }: EventListProps) {
     return <p className="text-sm text-slate-500">No events yet.</p>;
   }
 
+  const now = new Date();
+  let filteredEvents = events;
+
+  if (scope === "today") {
+    const startOfDay = new Date(now);
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date(now);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    filteredEvents = events.filter((ev) => {
+      const start = new Date(ev.start);
+      return start >= startOfDay && start <= endOfDay;
+    });
+  } else if (scope === "week") {
+    const start = new Date(now);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(now);
+    end.setDate(end.getDate() + 7);
+    end.setHours(23, 59, 59, 999);
+
+    filteredEvents = events.filter((ev) => {
+      const startTime = new Date(ev.start);
+      return startTime >= start && startTime <= end;
+    });
+  }
+
   // Group events by family member
   const groupsMap = new Map<string, GroupedEvents>();
 
-  for (const ev of events) {
+  for (const ev of filteredEvents) {
     const member = ev.familyMember;
     const key = member.id;
 
@@ -202,7 +169,7 @@ export function EventList({ refreshKey }: EventListProps) {
                     variant="ghost"
                     size="sm"
                     className="text-xs text-red-600 hover:text-red-700"
-                    onClick={() => handleDelete(ev.id)}
+                    onClick={() => onDelete(ev.id)}
                   >
                     Delete
                   </Button>
