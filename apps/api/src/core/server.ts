@@ -11,9 +11,9 @@ export function buildServer(): FastifyInstance {
 
   // Enable CORS so the frontend on localhost:3000 can call this API
   app.register(cors, {
-    origin: "http://localhost:3000"
+    // origin: "http://localhost:3000"
     // If you want to allow everything during dev, you could also use:
-    // origin: true
+    origin: true // for now.
   });
 
 
