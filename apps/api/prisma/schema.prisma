@@ -14,8 +14,24 @@ model FamilyMember {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
-  // Relation: one family member can have many events
+  // Relation: one family member can have many events and calendarFeeds
   events    FamilyEvent[]
+  calendarFeeds CalendarFeed[]
+}
+
+model CalendarFeed {
+  id             String       @id @default(uuid())
+  url            String
+  familyMember   FamilyMember @relation(fields: [familyMemberId], references: [id])
+  familyMemberId String
+
+  // Calender events will be using this
+  events         FamilyEvent[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([familyMemberId])
 }
 
 model FamilyEvent {
@@ -26,6 +42,8 @@ model FamilyEvent {
   location       String?
   familyMemberId String
   familyMember   FamilyMember @relation(fields: [familyMemberId], references: [id], onDelete: Cascade)
+  calendarFeedId String?
+  calendarFeed   CalendarFeed? @relation(fields: [calendarFeedId], references: [id])
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
 }
@@ -34,3 +52,4 @@ enum FamilyRole {
   PARENT
   CHILD
 }
+

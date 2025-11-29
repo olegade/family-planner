@@ -7,6 +7,7 @@ import {
   CardTitle,
   CardContent,
 } from "./components/ui/card.js";
+import { CalendarEventsPanel } from "./CalendarEventsPanel.js";
 
 export function Dashboard() {
   return (
@@ -30,6 +31,18 @@ export function Dashboard() {
         </CardHeader>
         <CardContent className="space-y-3">
           <NextEventSummary />
+        </CardContent>
+      </Card>
+      
+      {/* Ole's calendar */}
+      <Card className="shadow-sm border-slate-200">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-sm font-semibold text-slate-800">
+            Oles calendar events
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+        <CalendarEventsPanel memberId="bc83eb0b-79ce-4550-bcdd-92bf5de63204" />
         </CardContent>
       </Card>
 

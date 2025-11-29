@@ -2,6 +2,8 @@ import Fastify, { type FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 import { registerFamilyRoutes } from "../modules/family/family.routes.js";
 import { registerEventRoutes } from "../modules/events/events.routes.js";
+import { registerCalendarFeedRoutes } from "../modules/calendar-feeds/calendarFeed.routes.js";
+import registerCalendarRoutes from "../modules/calendar/calendar.routes.js";
 
 // Builds and configures the Fastify server instance
 export function buildServer(): FastifyInstance {
@@ -25,6 +27,7 @@ export function buildServer(): FastifyInstance {
   // Register domain routes
   registerFamilyRoutes(app);
   registerEventRoutes(app);
-
+  registerCalendarFeedRoutes(app);
+  registerCalendarRoutes(app);
   return app;
 }

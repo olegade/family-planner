@@ -25,6 +25,9 @@ importers:
       fastify:
         specifier: ^4.28.0
         version: 4.29.1
+      ics-to-json:
+        specifier: ^2.0.2
+        version: 2.0.2
       pg:
         specifier: ^8.16.3
         version: 8.16.3
@@ -2035,6 +2038,9 @@ packages:
   iconv-lite@0.7.0:
     resolution: {integrity: sha512-cf6L2Ds3h57VVmkZe+Pn+5APsT7FpqJtEhhieDCvrE2MK5Qk9MyffgQyuxQTm6BChfeZNtcOLHp9IcWRVcIcBQ==}
     engines: {node: '>=0.10.0'}
+
+  ics-to-json@2.0.2:
+    resolution: {integrity: sha512-dOuv0Z7cNKQK70/S3pIm+6Ytqn/+Be7YeRagaQzc03sytHKZEGZZe3V0KCiP2oawCUk+qOpN9J9bovKWbfNE4Q==}
 
   ignore-walk@6.0.5:
     resolution: {integrity: sha512-VuuG0wCnjhnylG1ABXT3dAuIpTNDs/G8jlpmwXY03fXoXy/8ZK8/T+hMzt8L4WnrLCJgdybqgPagnF/f97cg3A==}
@@ -5378,6 +5384,8 @@ snapshots:
   iconv-lite@0.7.0:
     dependencies:
       safer-buffer: 2.1.2
+
+  ics-to-json@2.0.2: {}
 
   ignore-walk@6.0.5:
     dependencies:
